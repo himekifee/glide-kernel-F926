@@ -368,20 +368,6 @@ enum stm_ts_nvm_data_type {		/* Write Command */
 	STM_TS_NVM_OFFSET_CAL_FAIL_COUNT,
 };
 
-enum {
-	LCD_EARLY_EVENT = 0,
-	LCD_LATE_EVENT
-};
-
-enum {
-	SERVICE_SHUTDOWN = -1,
-	LCD_NONE = 0,
-	LCD_OFF,
-	LCD_ON,
-	LCD_DOZE1,
-	LCD_DOZE2
-};
-
 struct stm_ts_nvm_data_map {
 	int type;
 	int offset;

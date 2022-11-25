@@ -567,7 +567,7 @@ static ssize_t stm_ts_fod_position_show(struct device *dev,
 
 	if (!ts->plat_data->support_fod) {
 		input_err(true, &ts->client->dev, "%s: fod is not supported\n", __func__);
-		return snprintf(buf, SEC_CMD_BUF_SIZE, "NG");
+		return snprintf(buf, SEC_CMD_BUF_SIZE, "NA");
 	}
 
 	if (!ts->plat_data->fod_data.vi_size) {
@@ -677,14 +677,14 @@ static ssize_t enabled_store(struct device *dev, struct device_attribute *attr,
 		return -EINVAL;
 	}
 
-	if (buff[0] == LCD_ON && buff[1] == LCD_LATE_EVENT) {
+	if (buff[0] == DISPLAY_STATE_ON && buff[1] == DISPLAY_EVENT_LATE) {
 		if (ts->plat_data->enabled) {
 			input_err(true, &ts->client->dev,"%s: device already enabled\n", __func__);
 			goto out;
 		}
 
 		ret = sec_input_enable_device(input_dev);
-	} else if (buff[0] == LCD_OFF && buff[1] == LCD_EARLY_EVENT) {
+	} else if (buff[0] == DISPLAY_STATE_OFF && buff[1] == DISPLAY_EVENT_EARLY) {
 		if (!ts->plat_data->enabled) {
 			input_err(true, &ts->client->dev,"%s: device already disabled\n", __func__);
 			goto out;

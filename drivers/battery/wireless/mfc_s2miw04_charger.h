@@ -25,7 +25,7 @@
 #include <linux/pm_wakeup.h>
 #include "../common/sec_charging_common.h"
 
-#define MFC_FW_BIN_VERSION		0x1028
+#define MFC_FW_BIN_VERSION		0x102C
 #define MFC_FW_VER_BIN_LSI		0xBFC
 #define MTP_MAX_PROGRAM_SIZE 0x4000
 #define MTP_VERIFY_ADDR			0x0000
@@ -903,6 +903,7 @@ struct mfc_charger_data {
 	struct wakeup_source *wpc_tx_phm_ws;
 	struct wakeup_source *wpc_tx_id_ws;
 	struct wakeup_source *wpc_pdrc_ws;
+	struct wakeup_source *wpc_cs100_ws;
 	struct workqueue_struct *wqueue;
 	struct work_struct	wcin_work;
 	struct delayed_work	wpc_det_work;

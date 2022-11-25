@@ -256,7 +256,7 @@ ssize_t get_cmoffset_dump(struct stm_ts_data *ts, char *buf, u8 position)
 		if (cm_num == OFFSET_FAC_DATA_CM2) {
 			signature = STM_TS_CM2_SIGNATURE;
 			address[1] = 0x01;
-		} else if (cm_num == OFFSET_FAC_DATA_CM3){
+		} else if (cm_num == OFFSET_FAC_DATA_CM3) {
 			signature = STM_TS_CM3_SIGNATURE;
 			address[1] = 0x02;
 		}
@@ -342,7 +342,7 @@ out:
 	ret = stm_ts_wait_for_echo_event(ts, address, 2, 0);
 	if (ret < 0)
 		goto err_out;
-	
+
 	// Set Normal mode : save test data & fail history
 	address[0] = 0xE4;
 	address[1] = 0x00;

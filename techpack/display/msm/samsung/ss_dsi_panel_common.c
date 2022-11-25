@@ -342,6 +342,8 @@ char ss_cmd_set_prop_map[SS_CMD_PROP_SIZE][SS_CMD_PROP_STR_LEN] = {
 	"TX_TEST_MODE_CMD_START not parsed from DTSI",
 	"samsung,gct_checksum_rx_cmds_revA",
 	"samsung,gct_ecc_rx_cmds_revA",
+	"samsung,ssr_on_rx_cmds_revA",
+	"samsung,ssr_check_rx_cmds_revA",
 	"samsung,gct_enter_tx_cmds_revA",
 	"samsung,gct_mid_tx_cmds_revA",
 	"samsung,gct_exit_tx_cmds_revA",
@@ -3321,6 +3323,34 @@ int ss_panel_off_post(struct samsung_display_driver_data *vdd)
 	return ret;
 }
 
+int ss_panel_power_on_pre(struct samsung_display_driver_data *vdd)
+{
+	int ret = 0;
+
+	LCD_INFO(vdd, "+\n");
+
+	if (!IS_ERR_OR_NULL(vdd->panel_func.samsung_panel_power_on_pre))
+		vdd->panel_func.samsung_panel_power_on_pre(vdd);
+
+	LCD_INFO(vdd, "-\n");
+
+	return ret;
+}
+
+int ss_panel_power_off_post(struct samsung_display_driver_data *vdd)
+{
+	int ret = 0;
+
+	LCD_INFO(vdd, "+\n");
+
+	if (!IS_ERR_OR_NULL(vdd->panel_func.samsung_panel_power_off_post))
+		vdd->panel_func.samsung_panel_power_off_post(vdd);
+
+	LCD_INFO(vdd, "-\n");
+
+	return ret;
+}
+
 int ss_frame_delay(int fps, int frame)
 {
 	int delay_us = (1000000 / fps) + 1000; /* 1ms dummy */
@@ -3615,7 +3645,7 @@ __visible_for_testing irqreturn_t esd_irq_handler(int irq, void *handle)
 	schedule_work(&conn->status_work.work);
 
 	LCD_INFO(vdd, "Panel Recovery(ESD, irq%d), Trial Count = %d\n", irq, vdd->panel_recovery_cnt++);
-	SS_XLOG(vdd->panel_recovery_cnt);
+	SS_XLOG(vdd->ndx, vdd->panel_recovery_cnt);
 	inc_dpui_u32_field(DPUI_KEY_QCT_RCV_CNT, 1);
 
 	if (vdd->is_factory_mode) {
@@ -4893,6 +4923,12 @@ static void ss_panel_parse_dt(struct samsung_display_driver_data *vdd)
 		of_property_read_bool(np, "samsung,tcon-clk-on-support");
 	LCD_INFO(vdd, "tcon clk on support: %s\n",
 			vdd->dtsi_data.samsung_tcon_clk_on_support ?
+			"enabled" : "disabled");
+
+	/* DDI Uses Flash memory */
+	vdd->dtsi_data.ddi_no_flash =
+		of_property_read_bool(np, "samsung,ddi_no_flash");
+	LCD_INFO(vdd, "ddi_no_flash: %s\n", vdd->dtsi_data.ddi_no_flash ?
 			"enabled" : "disabled");
 
 	vdd->dtsi_data.samsung_tcon_rdy_gpio =
@@ -8172,6 +8208,15 @@ int samsung_panel_initialize(char *panel_string, unsigned int ndx)
 	else if (!strncmp(panel_string, "XCP2_NT36672C_PM6585JB2", strlen(panel_string)))
 		vdd->panel_func.samsung_panel_init = XCP2_NT36672C_PM6585JB2_FHD_init;
 #endif
+#if IS_ENABLED(CONFIG_PANEL_TAP2_HX8279_TV101WUM_WUXGA)
+	else if (!strncmp(panel_string, "TAP2_HX8279_TV101WUM", strlen(panel_string)))
+		vdd->panel_func.samsung_panel_init = TAP2_HX8279_TV101WUM_WUXGA_init;
+#endif
+#if IS_ENABLED(CONFIG_PANEL_GTACT4PRO_HX8279_TV101WUM_WUXGA)
+	else if (!strncmp(panel_string, "GTACT4PRO_HX8279_TV101WUM", strlen(panel_string)))
+		vdd->panel_func.samsung_panel_init = GTACT4PRO_HX8279_TV101WUM_WUXGA_init;
+#endif
+
 	else {
 		LCD_ERR(vdd, "%s not found\n", panel_string);
 		return -1;
