@@ -1,0 +1,10 @@
+[submodule "toolchain/gcc"]
+	path = toolchain/gcc
+	url = https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9.git
+[submodule "toolchain/clang"]
+	path = toolchain/clang
+	url = https://github.com/kdrag0n/proton-clang.git
+[submodule "release"]
+	path = release
+	url = https://github.com/himekifee/AnyKernel3.git
+	branch = F926

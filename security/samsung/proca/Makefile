@@ -2,6 +2,8 @@ SHELL := /bin/bash
 
 KERNEL := $(VERSION)_$(PATCHLEVEL)
 
+ccflags-y += -Wno-vla
+
 # For kernel version 4.14 or lower
 ifeq ($(KERNEL),4_14)
 $(obj)/proca_certificate-asn1.o: $(obj)/proca_certificate-asn1.c \
