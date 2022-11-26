@@ -496,7 +496,7 @@ KBUILD_CFLAGS   := -Wall -Wundef -Werror=strict-prototypes -Wno-trigraphs \
 		   -std=gnu99 \
 		   -Wno-void-pointer-to-int-cast -Wno-pointer-to-int-cast \
 		   -Wno-align-mismatch -Wno-vla -Wno-strict-prototypes \
-		   -Wno-implicit-int -Wno-pragma-pack
+		   -Wno-implicit-int -Wno-pragma-pack -Wno-frame-larger-than=
 KBUILD_CPPFLAGS := -D__KERNEL__
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=

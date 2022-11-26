@@ -69,7 +69,7 @@ if [ -f out/arch/arm64/boot/Image ]; then
         cp -f out/arch/arm64/boot/Image release/
     fi
     find out -type f -name "*.ko" -exec cp -Rf "{}" release/modules/system/vendor/lib/modules/ \;
-    
+    find release/modules/system/vendor/lib/modules/ -type f -name "*.ko" -exec aarch64-linux-gnu-strip --strip-debug "{}" \;
     HASH=$(git rev-parse --short HEAD)
     
     cd release
