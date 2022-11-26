@@ -47,7 +47,7 @@ mkdir -p release/modules/system/vendor/lib/modules
 BUILD_CROSS_COMPILE=$(pwd)/toolchain/gcc/bin/aarch64-linux-android-
 KERNEL_LLVM_BIN=$(pwd)/toolchain/clang/bin/clang
 CLANG_TRIPLE=aarch64-linux-gnu-
-KERNEL_MAKE_ENV="DTC_EXT=$(pwd)/tools/dtc CONFIG_BUILD_ARM64_DT_OVERLAY=y"
+KERNEL_MAKE_ENV="DTC_EXT=$(pwd)/tools/dtc CONFIG_BUILD_ARM64_DT_OVERLAY=y LOCALVERSION=-Glide"
 
 make -j$(nproc) -C $(pwd) O=$(pwd)/out $KERNEL_MAKE_ENV ARCH=arm64 CROSS_COMPILE=$BUILD_CROSS_COMPILE REAL_CC=$KERNEL_LLVM_BIN CLANG_TRIPLE=$CLANG_TRIPLE vendor/q2q_eur_openx_defconfig
 make -j$(nproc) -C $(pwd) O=$(pwd)/out $KERNEL_MAKE_ENV ARCH=arm64 CROSS_COMPILE=$BUILD_CROSS_COMPILE REAL_CC=$KERNEL_LLVM_BIN CLANG_TRIPLE=$CLANG_TRIPLE
@@ -70,6 +70,7 @@ if [ -f out/arch/arm64/boot/Image ]; then
     fi
     find out -type f -name "*.ko" -exec cp -Rf "{}" release/modules/system/vendor/lib/modules/ \;
     find release/modules/system/vendor/lib/modules/ -type f -name "*.ko" -exec aarch64-linux-gnu-strip --strip-debug "{}" \;
+    mv release/modules/system/vendor/lib/modules/wlan.ko release/modules/system/vendor/lib/modules/qca_cld3_wlan.ko
     HASH=$(git rev-parse --short HEAD)
     
     cd release
